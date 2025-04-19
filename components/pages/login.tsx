@@ -13,8 +13,10 @@ import {
   View,
 } from "react-native";
 import Link from "../link";
+import { useRouter } from "expo-router";
 
 export default function LoginPage() {
+  const router = useRouter();
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
   });
@@ -31,7 +33,8 @@ export default function LoginPage() {
 
   const onSubmit = (data: LoginFormSchema) => {
     console.log("Form submitted:", data);
-    login(data);
+    router.push("/home");
+    // login(data);
   };
 
   return (

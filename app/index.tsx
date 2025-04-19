@@ -1,5 +1,14 @@
-import LoginPage from "@/components/pages/login";
+import { useRootNavigationState, useRouter } from "expo-router";
+import { useEffect } from "react";
 
 export default function Index() {
-  return <LoginPage />;
+  const router = useRouter();
+  const rootNavigationState = useRootNavigationState();
+
+  useEffect(() => {
+    if (!rootNavigationState?.key) return; // tunggu sampai Root Navigation siap
+    router.replace("/login");
+  }, [rootNavigationState]);
+
+  return null;
 }

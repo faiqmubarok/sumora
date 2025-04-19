@@ -1,7 +1,10 @@
 import Colors from "@/constants/colors";
-import { UsePostLogin } from "@/features/auth/apis/use-post-login";
-import LoginForm from "@/features/auth/components/login-form";
-import { LoginFormSchema, loginFormSchema } from "@/features/auth/form/form";
+import { UsePostRegister } from "@/features/auth/apis/use-post-register";
+import RegisterForm from "@/features/auth/components/register-form";
+import {
+  RegisterFormSchema,
+  registerFormSchema,
+} from "@/features/auth/form/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import {
@@ -14,14 +17,14 @@ import {
 } from "react-native";
 import Link from "../link";
 
-export default function LoginPage() {
-  const form = useForm<LoginFormSchema>({
-    resolver: zodResolver(loginFormSchema),
+export default function RegisterPage() {
+  const form = useForm<RegisterFormSchema>({
+    resolver: zodResolver(registerFormSchema),
   });
 
-  const { mutate: login, isPending } = UsePostLogin({
+  const { mutate: register, isPending } = UsePostRegister({
     onSuccess: () => {
-      console.log("Login successful");
+      console.log("Register successful");
       form.reset();
     },
     onError: (e) => {
@@ -29,9 +32,9 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = (data: LoginFormSchema) => {
+  const onSubmit = (data: RegisterFormSchema) => {
     console.log("Form submitted:", data);
-    login(data);
+    register(data);
   };
 
   return (
@@ -51,25 +54,22 @@ export default function LoginPage() {
               alt="logo"
               source={require("@/assets/images/logo.png")}
             />
-            <Text style={styles.title}>Sign in to Sumora</Text>
+            <Text style={styles.title}>Sign up to Sumora</Text>
             <Text style={styles.subtitle}>
-              Monitor your water with confidence. Log in to track, analyze, and
-              ensure its safety.
+              Start protecting your water today. Create an account to monitor,
+              analyze, and keep it safe—right from the start.
             </Text>
           </View>
 
           <View style={styles.formContainer}>
             <FormProvider {...form}>
-              <LoginForm onSubmit={onSubmit} />
+              <RegisterForm onSubmit={onSubmit} />
             </FormProvider>
             {/* Footer */}
             <View style={styles.footer}>
-              <Text style={styles.footerText}>Don't have an account?</Text>
-              <Link
-                href={"/register"}
-                style={{ textDecorationLine: "underline" }}
-              >
-                Sign up
+              <Text style={styles.footerText}>Already have an account?</Text>
+              <Link href={"/login"} style={{ textDecorationLine: "underline" }}>
+                Sign in
               </Link>
             </View>
           </View>

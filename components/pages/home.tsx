@@ -1,0 +1,436 @@
+import {
+  View,
+  Text,
+  ScrollView,
+  ImageBackground,
+  Image,
+  Pressable,
+  ImageSourcePropType,
+} from "react-native";
+import React from "react";
+import colors from "@/constants/colors";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Button from "@/components/button";
+import { BlurView } from "expo-blur";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import overview1 from "@/assets/images/overview-1.png";
+import overview2 from "@/assets/images/overview-2.png";
+import overview3 from "@/assets/images/overview-3.png";
+
+enum Label {
+  Fresh = "fresh",
+  Urgent = "urgent",
+}
+
+const news: { time: string; name: string; label: string }[] = [
+  {
+    time: "09:21",
+    name: "Check Well Water Quality",
+    label: Label.Fresh,
+  },
+  {
+    time: "05:21",
+    name: "High Contaminants Detected",
+    label: Label.Urgent,
+  },
+  {
+    time: "09:21",
+    name: "Check Well Water Quality",
+    label: Label.Fresh,
+  },
+];
+
+type Overview = {
+  name: string;
+  image: ImageSourcePropType;
+  coordinates: {
+    latitude: string;
+    longitude: string;
+  };
+  label: { ppm: number; ph: number };
+};
+
+const overview: Overview[] = [
+  {
+    name: "Chaewon House",
+    image: overview1,
+    coordinates: {
+      latitude: "7°44'41.1\"S",
+      longitude: "110°22'10.2\"E",
+    },
+    label: {
+      ppm: 121,
+      ph: 8.2,
+    },
+  },
+  {
+    name: "Jiwon House",
+    image: overview2,
+    coordinates: {
+      latitude: "7°44'41.1\"S",
+      longitude: "110°22'10.2\"E",
+    },
+    label: {
+      ppm: 121,
+      ph: 8.2,
+    },
+  },
+  {
+    name: "Yuri House",
+    image: overview3,
+    coordinates: {
+      latitude: "7°44'41.1\"S",
+      longitude: "110°22'10.2\"E",
+    },
+    label: {
+      ppm: 121,
+      ph: 8.2,
+    },
+  },
+];
+
+const CardNews = ({
+  time,
+  name,
+  label,
+}: {
+  time: string;
+  name: string;
+  label: string;
+}) => {
+  return (
+    <View
+      style={{
+        backgroundColor: colors.WHITE,
+        borderRadius: 16,
+        padding: 12,
+        width: 174,
+        height: 162,
+        alignSelf: "flex-start",
+        justifyContent: "space-between",
+      }}
+    >
+      <View style={{ gap: 4 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+          <MaterialCommunityIcons
+            name="clock-time-three-outline"
+            size={20}
+            color="#A5A5A5"
+          />
+          <Text
+            style={{
+              fontFamily: "DMSans-Medium",
+              fontSize: 14,
+              color: "#A5A5A5",
+            }}
+          >
+            {time}
+          </Text>
+        </View>
+        <Text
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          style={{ fontFamily: "DMSans-Medium", fontSize: 16 }}
+        >
+          {name}
+        </Text>
+      </View>
+      <View
+        style={{
+          backgroundColor: label === Label.Fresh ? "#0F6F27" : "#B81414",
+          alignSelf: "flex-start",
+          paddingHorizontal: 12,
+          paddingVertical: 4,
+          borderRadius: 999,
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: "DMSans-Regular",
+            color: colors.WHITE,
+            textTransform: "capitalize",
+          }}
+        >
+          {label}
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+const CardOverview = ({ name, image, coordinates, label }: Overview) => {
+  return (
+    <View style={{ flexDirection: "row", gap: 16 }}>
+      <Image
+        source={image}
+        width={122}
+        height={96}
+        borderRadius={8}
+        alt={name}
+        style={{
+          overflow: "hidden",
+          width: 122,
+          height: 96,
+          objectFit: "cover",
+        }}
+      />
+      <View style={{ flex: 1, justifyContent: "space-between" }}>
+        <View style={{ gap: 4 }}>
+          <Text
+            style={{
+              fontFamily: "DMSans-Medium",
+              fontSize: 16,
+            }}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {name}
+          </Text>
+          <Text style={{ fontFamily: "DMSans-Regular", color: "#A5A5A5" }}>
+            {coordinates.latitude}, {coordinates.longitude}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          {Object.entries(label).map(([key, value]) => (
+            <View
+              key={key}
+              style={{
+                alignSelf: "flex-start",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                gap: 4,
+                marginTop: 8,
+                borderRadius: 999,
+                flexDirection: "row",
+                borderWidth: 1,
+                borderColor: "#E2E2E2",
+              }}
+            >
+              {key === "ppm" ? (
+                <MaterialCommunityIcons
+                  name="water"
+                  size={16}
+                  color="#4D4D4D"
+                />
+              ) : (
+                <FontAwesome5 name="microscope" size={16} color="#4D4D4D" />
+              )}
+              <Text style={{ fontFamily: "DMSans-Regular", color: "#4D4D4D" }}>
+                {value} {key}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export default function HomePage() {
+  return (
+    <ImageBackground
+      source={require("@/assets/images/banner-homepage.png")}
+      imageStyle={{ flex: 1 }}
+    >
+      <ScrollView>
+        {/* Header */}
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 60,
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 16,
+          }}
+        >
+          <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
+            <Image
+              source={require("@/assets/images/avatar.png")}
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                overflow: "hidden",
+              }}
+            />
+            <View>
+              <Text
+                style={{
+                  color: colors.WHITE,
+                  fontFamily: "DMSans-SemiBold",
+                  fontSize: 16,
+                }}
+              >
+                Welcome back!!
+              </Text>
+              <Text
+                style={{ color: colors.WHITE, fontFamily: "DMSans-Regular" }}
+              >
+                Kim Chaewon
+              </Text>
+            </View>
+          </View>
+          <BlurView
+            // experimentalBlurMethod="dimezisBlurView"
+            intensity={15}
+            tint="light"
+            style={{
+              borderRadius: 999,
+              overflow: "hidden",
+              backgroundColor: "rgba(169,169,169,0.15)",
+              width: 44,
+              height: 44,
+              justifyContent: "center",
+              alignItems: "center",
+              position: "relative",
+            }}
+          >
+            <Button style={{ backgroundColor: "transparent" }}>
+              <Ionicons name="notifications-outline" size={18} color="white" />
+            </Button>
+            {/* Badge Merah */}
+            <View
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: "#E71212",
+                position: "absolute",
+                top: 10,
+                right: 10,
+              }}
+            />
+          </BlurView>
+        </View>
+
+        {/* Info */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 16,
+            marginTop: 224,
+            marginBottom: 13,
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                fontFamily: "DMSans-Medium",
+                fontSize: 64,
+                height: 64,
+                lineHeight: 72,
+                color: colors.WHITE,
+                letterSpacing: 0.5,
+              }}
+            >
+              85
+            </Text>
+            <Text
+              style={{
+                fontFamily: "DMSans-Regular",
+                fontSize: 16,
+                color: colors.WHITE,
+              }}
+            >
+              Safe for daily use
+            </Text>
+          </View>
+          <View style={{ gap: 8 }}>
+            <BlurView
+              intensity={15}
+              tint="light"
+              style={{
+                alignSelf: "flex-end",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                gap: 8,
+                backgroundColor: "rgba(169,169,169,0.15)",
+                borderRadius: 999,
+                overflow: "hidden",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <MaterialCommunityIcons name="water" size={16} color="white" />
+              <Text style={{ color: colors.WHITE }}>150 ppm</Text>
+            </BlurView>
+            <BlurView
+              intensity={15}
+              tint="light"
+              style={{
+                alignSelf: "flex-end",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                gap: 8,
+                backgroundColor: "rgba(169,169,169,0.15)",
+                borderRadius: 999,
+                overflow: "hidden",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <FontAwesome5 name="microscope" size={16} color="white" />
+              <Text style={{ color: colors.WHITE }}>8.2 pH</Text>
+            </BlurView>
+          </View>
+        </View>
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: 4 }}
+        >
+          {news.map((item, index) => (
+            <CardNews
+              key={index}
+              time={item.time}
+              name={item.name}
+              label={item.label}
+            />
+          ))}
+        </ScrollView>
+
+        <View
+          style={{
+            backgroundColor: colors.WHITE,
+            marginTop: 4,
+            flex: 1,
+            borderTopRightRadius: 20,
+            borderTopLeftRadius: 20,
+            padding: 16,
+            gap: 28,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontFamily: "DMSans-SemiBold", fontSize: 20 }}>
+              Water Overview
+            </Text>
+            <Pressable>
+              <Text style={{ fontFamily: "DMSans-Regular", color: "#0A40E2" }}>
+                View Report
+              </Text>
+            </Pressable>
+          </View>
+          {overview.map((item, index) => (
+            <CardOverview
+              key={index}
+              name={item.name}
+              image={item.image}
+              coordinates={item.coordinates}
+              label={item.label}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </ImageBackground>
+  );
+}

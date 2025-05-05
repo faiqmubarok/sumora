@@ -17,6 +17,9 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import overview1 from "@/assets/images/overview-1.png";
 import overview2 from "@/assets/images/overview-2.png";
 import overview3 from "@/assets/images/overview-3.png";
+import insight1 from "@/assets/images/insight-1.png";
+import insight2 from "@/assets/images/insight-2.png";
+import insight3 from "@/assets/images/insight-3.png";
 
 enum Label {
   Fresh = "fresh",
@@ -44,11 +47,11 @@ const news: { time: string; name: string; label: string }[] = [
 type Overview = {
   name: string;
   image: ImageSourcePropType;
-  coordinates: {
+  coordinates?: {
     latitude: string;
     longitude: string;
   };
-  label: { ppm: number; ph: number };
+  label?: { ppm: number; ph: number };
 };
 
 const overview: Overview[] = [
@@ -87,6 +90,24 @@ const overview: Overview[] = [
       ppm: 121,
       ph: 8.2,
     },
+  },
+];
+
+const insight = [
+  {
+    image: insight1,
+    name: "Why Daily Water Monitoring Matters More Than You Think",
+    date: "14 July 2025",
+  },
+  {
+    image: insight2,
+    name: "Understanding Water Quality: What’s Really in Your Tap?",
+    date: "18 May 2025",
+  },
+  {
+    image: insight3,
+    name: "Saving Every Drop: Smart Habits for Sustainable Water Use",
+    date: "9 Oktober 2025",
   },
 ];
 
@@ -159,7 +180,19 @@ const CardNews = ({
   );
 };
 
-const CardOverview = ({ name, image, coordinates, label }: Overview) => {
+interface CardOverviewProps extends Overview {
+  variant?: "overview" | "article";
+  date?: string;
+}
+
+const CardOverview = ({
+  name,
+  image,
+  coordinates,
+  label = { ppm: 0, ph: 0 },
+  variant = "overview",
+  date,
+}: CardOverviewProps) => {
   return (
     <View style={{ flexDirection: "row", gap: 16 }}>
       <Image
@@ -182,45 +215,55 @@ const CardOverview = ({ name, image, coordinates, label }: Overview) => {
               fontFamily: "DMSans-Medium",
               fontSize: 16,
             }}
-            numberOfLines={1}
+            numberOfLines={2}
             ellipsizeMode="tail"
           >
             {name}
           </Text>
-          <Text style={{ fontFamily: "DMSans-Regular", color: "#A5A5A5" }}>
-            {coordinates.latitude}, {coordinates.longitude}
-          </Text>
+          {variant === "overview" ? (
+            <Text style={{ fontFamily: "DMSans-Regular", color: "#A5A5A5" }}>
+              {coordinates?.latitude}, {coordinates?.longitude}
+            </Text>
+          ) : null}
         </View>
         <View style={{ flexDirection: "row", gap: 8 }}>
-          {Object.entries(label).map(([key, value]) => (
-            <View
-              key={key}
-              style={{
-                alignSelf: "flex-start",
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                gap: 4,
-                marginTop: 8,
-                borderRadius: 999,
-                flexDirection: "row",
-                borderWidth: 1,
-                borderColor: "#E2E2E2",
-              }}
-            >
-              {key === "ppm" ? (
-                <MaterialCommunityIcons
-                  name="water"
-                  size={16}
-                  color="#4D4D4D"
-                />
-              ) : (
-                <FontAwesome5 name="microscope" size={16} color="#4D4D4D" />
-              )}
-              <Text style={{ fontFamily: "DMSans-Regular", color: "#4D4D4D" }}>
-                {value} {key}
-              </Text>
-            </View>
-          ))}
+          {variant === "overview" ? (
+            Object.entries(label).map(([key, value]) => (
+              <View
+                key={key}
+                style={{
+                  alignSelf: "flex-start",
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                  gap: 4,
+                  marginTop: 8,
+                  borderRadius: 999,
+                  flexDirection: "row",
+                  borderWidth: 1,
+                  borderColor: "#E2E2E2",
+                }}
+              >
+                {key === "ppm" ? (
+                  <MaterialCommunityIcons
+                    name="water"
+                    size={16}
+                    color="#4D4D4D"
+                  />
+                ) : (
+                  <FontAwesome5 name="microscope" size={16} color="#4D4D4D" />
+                )}
+                <Text
+                  style={{ fontFamily: "DMSans-Regular", color: "#4D4D4D" }}
+                >
+                  {value} {key}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text style={{ fontFamily: "DMSans-Regular", color: "#A5A5A5" }}>
+              {date}
+            </Text>
+          )}
         </View>
       </View>
     </View>
@@ -404,6 +447,7 @@ export default function HomePage() {
             gap: 28,
           }}
         >
+          {/* Water Overview */}
           <View
             style={{
               flexDirection: "row",
@@ -427,6 +471,33 @@ export default function HomePage() {
               image={item.image}
               coordinates={item.coordinates}
               label={item.label}
+            />
+          ))}
+
+          {/* Water Insight */}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontFamily: "DMSans-SemiBold", fontSize: 20 }}>
+              Water Insights
+            </Text>
+            <Pressable>
+              <Text style={{ fontFamily: "DMSans-Regular", color: "#0A40E2" }}>
+                View Report
+              </Text>
+            </Pressable>
+          </View>
+          {insight.map((item, index) => (
+            <CardOverview
+              key={index}
+              name={item.name}
+              image={item.image}
+              date={item.date}
+              variant="article"
             />
           ))}
         </View>

@@ -1,11 +1,10 @@
-import Colors from "@/constants/colors";
 import { TanstackProvider } from "@/providers/tanstack-provider";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
 import "./global.css";
+import LoadingScreen from "@/components/loading-screen";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -29,18 +28,7 @@ export default function RootLayout() {
   }, [fontsLoaded]);
 
   if (!appReady) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: Colors.WHITE,
-        }}
-      >
-        <Text>Loading Screen</Text>
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (

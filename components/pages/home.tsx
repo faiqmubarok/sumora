@@ -6,6 +6,7 @@ import {
   Image,
   Pressable,
   ImageSourcePropType,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import colors from "@/constants/colors";
@@ -202,9 +203,10 @@ const CardOverview = ({
   const router = useRouter();
 
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={() => router.push(`/article/${id}`)}
       style={{ flexDirection: "row", gap: 16 }}
+      activeOpacity={0.6}
     >
       <Image
         source={image}
@@ -277,7 +279,7 @@ const CardOverview = ({
           )}
         </View>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

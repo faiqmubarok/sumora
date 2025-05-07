@@ -1,10 +1,5 @@
-import { View, Text } from "react-native";
-import React from "react";
+import DetailArticlePage from "@/components/pages/detail-article";
 
 export default function DetailArticle() {
-  return (
-    <View>
-      <Text>DetailArticle</Text>
-    </View>
-  );
+  return <DetailArticlePage />;
 }

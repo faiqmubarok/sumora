@@ -10,22 +10,37 @@ import {
 } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import colors from "@/constants/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-const icons: Record<string, React.ReactElement> = {
-  home: <Ionicons name="home-outline" size={28} />,
-  pulse: <Ionicons name="water-outline" size={28} />,
-  report: <Feather name="file-text" size={28} />,
-  profile: <Ionicons name="person-outline" size={28} />,
-};
+import colors from "@/constants/colors";
 
 const { width } = Dimensions.get("window");
+const containerWidth = width * 0.7;
 
-const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+const MENUS = [
+  {
+    key: "home",
+    label: "Home",
+    icon: <Ionicons name="home-outline" size={28} />,
+  },
+  {
+    key: "pulse",
+    label: "Pulse",
+    icon: <Ionicons name="water-outline" size={28} />,
+  },
+  {
+    key: "report",
+    label: "Report",
+    icon: <Feather name="file-text" size={28} />,
+  },
+  {
+    key: "profile",
+    label: "Profile",
+    icon: <Ionicons name="person-outline" size={28} />,
+  },
+];
+
+const TabBar = ({ state, navigation }: BottomTabBarProps) => {
   const insets = useSafeAreaInsets();
-  const containerWidth = width * 0.7;
-
   const indicatorTranslate = useRef(new Animated.Value(0)).current;
   const [activeTabWidth, setActiveTabWidth] = useState(0);
   const [initialRenderDone, setInitialRenderDone] = useState(false);
@@ -33,7 +48,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const tabRefs = useRef<Record<string, View | null>>({});
 
   const measureTab = (index: number) => {
-    const key = state.routes[index].key;
+    const key = MENUS[index].key;
     const ref = tabRefs.current[key];
 
     if (ref) {
@@ -46,7 +61,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
             toValue: pageX - (width - containerWidth) / 2,
             useNativeDriver: true,
           }).start(() => {
-            setInitialRenderDone(true); // only set true after first anim done
+            setInitialRenderDone(true);
           });
         });
       }
@@ -54,7 +69,6 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   };
 
   useEffect(() => {
-    // Delay until layout is done
     setTimeout(() => {
       measureTab(state.index);
     }, 0);
@@ -100,33 +114,27 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           />
         )}
 
-        {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key];
-          const label =
-            typeof options.tabBarLabel === "string"
-              ? options.tabBarLabel
-              : typeof options.title === "string"
-              ? options.title
-              : route.name;
-
+        {MENUS.map((menu, index) => {
           const isFocused = state.index === index;
 
           const onPress = () => {
             const event = navigation.emit({
               type: "tabPress",
-              target: route.key,
+              target: state.routes[index].key,
               canPreventDefault: true,
             });
 
             if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
+              navigation.navigate(state.routes[index].name);
             }
           };
 
           return (
             <Pressable
-              key={route.key}
-              ref={(ref) => (tabRefs.current[route.key] = ref)}
+              key={menu.key}
+              ref={(ref) => {
+                tabRefs.current[menu.key] = ref;
+              }}
               onPress={onPress}
               style={{
                 paddingVertical: 12,
@@ -147,7 +155,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
                   opacity: isFocused ? 1 : 0.8,
                 }}
               >
-                {React.cloneElement(icons[route.name.toLowerCase()], {
+                {React.cloneElement(menu.icon, {
                   color: isFocused ? colors.BLACK : "#fff",
                 })}
                 {isFocused && (
@@ -161,7 +169,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
                     numberOfLines={1}
                     ellipsizeMode="tail"
                   >
-                    {label}
+                    {menu.label}
                   </Text>
                 )}
               </View>

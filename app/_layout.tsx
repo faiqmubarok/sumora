@@ -5,6 +5,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import "./global.css";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({

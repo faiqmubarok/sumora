@@ -20,6 +20,7 @@ import overview3 from "@/assets/images/overview-3.png";
 import insight1 from "@/assets/images/insight-1.png";
 import insight2 from "@/assets/images/insight-2.png";
 import insight3 from "@/assets/images/insight-3.png";
+import { useRouter } from "expo-router";
 
 enum Label {
   Fresh = "fresh",
@@ -95,16 +96,19 @@ const overview: Overview[] = [
 
 const insight = [
   {
+    id: 1,
     image: insight1,
     name: "Why Daily Water Monitoring Matters More Than You Think",
     date: "14 July 2025",
   },
   {
+    id: 2,
     image: insight2,
     name: "Understanding Water Quality: What’s Really in Your Tap?",
     date: "18 May 2025",
   },
   {
+    id: 3,
     image: insight3,
     name: "Saving Every Drop: Smart Habits for Sustainable Water Use",
     date: "9 Oktober 2025",
@@ -181,11 +185,13 @@ const CardNews = ({
 };
 
 interface CardOverviewProps extends Overview {
+  id: number;
   variant?: "overview" | "article";
   date?: string;
 }
 
 const CardOverview = ({
+  id,
   name,
   image,
   coordinates,
@@ -193,8 +199,13 @@ const CardOverview = ({
   variant = "overview",
   date,
 }: CardOverviewProps) => {
+  const router = useRouter();
+
   return (
-    <View style={{ flexDirection: "row", gap: 16 }}>
+    <Pressable
+      onPress={() => router.push(`/article/${id}`)}
+      style={{ flexDirection: "row", gap: 16 }}
+    >
       <Image
         source={image}
         width={122}
@@ -266,7 +277,7 @@ const CardOverview = ({
           )}
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -367,6 +378,7 @@ export default function HomePage() {
                 lineHeight: 72,
                 color: colors.WHITE,
                 letterSpacing: 0.5,
+                marginBottom: 4,
               }}
             >
               85
@@ -448,7 +460,7 @@ export default function HomePage() {
           }}
         >
           {/* Water Overview */}
-          <View
+          {/* <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -472,7 +484,7 @@ export default function HomePage() {
               coordinates={item.coordinates}
               label={item.label}
             />
-          ))}
+          ))} */}
 
           {/* Water Insight */}
           <View
@@ -487,12 +499,13 @@ export default function HomePage() {
             </Text>
             <Pressable>
               <Text style={{ fontFamily: "DMSans-Regular", color: "#0A40E2" }}>
-                View Report
+                View All
               </Text>
             </Pressable>
           </View>
           {insight.map((item, index) => (
             <CardOverview
+              id={item.id}
               key={index}
               name={item.name}
               image={item.image}

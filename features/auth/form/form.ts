@@ -2,8 +2,17 @@ import { z } from "zod";
 import { emailSchema, passwordSchema } from "@/schemas/auth";
 
 export const loginFormSchema = z.object({
-  email: emailSchema,
-  password: passwordSchema,
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .min(1, "Email is required")
+    .email("Email is invalid"),
+  password: z
+    .string({
+      required_error: "Password is required",
+    })
+    .min(1, "Password is required"),
 });
 
 export type LoginFormSchema = z.infer<typeof loginFormSchema>;

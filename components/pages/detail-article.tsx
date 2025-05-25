@@ -82,10 +82,18 @@ export default function DetailArticlePage() {
             style={styles.iconButton}
             onPress={() => navigation.goBack()}
           >
-            <Entypo name="chevron-left" size={20} color="white" />
+            <Entypo
+              name="chevron-left"
+              size={20}
+              color={barStyle === "light-content" ? "white" : "black"}
+            />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton}>
-            <MaterialIcons name="more-vert" size={20} color="white" />
+            <MaterialIcons
+              name="more-vert"
+              size={20}
+              color={barStyle === "light-content" ? "white" : "black"}
+            />
           </TouchableOpacity>
         </View>
 

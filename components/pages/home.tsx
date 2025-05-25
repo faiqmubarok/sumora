@@ -22,6 +22,8 @@ import insight1 from "@/assets/images/insight-1.png";
 import insight2 from "@/assets/images/insight-2.png";
 import insight3 from "@/assets/images/insight-3.png";
 import { useRouter } from "expo-router";
+import BadgeStatus from "../badge-status";
+import { StatusBar } from "expo-status-bar";
 
 enum Label {
   Fresh = "fresh",
@@ -162,25 +164,10 @@ const CardNews = ({
           {name}
         </Text>
       </View>
-      <View
-        style={{
-          backgroundColor: label === Label.Fresh ? "#0F6F27" : "#B81414",
-          alignSelf: "flex-start",
-          paddingHorizontal: 12,
-          paddingVertical: 4,
-          borderRadius: 999,
-        }}
-      >
-        <Text
-          style={{
-            fontFamily: "DMSans-Regular",
-            color: colors.WHITE,
-            textTransform: "capitalize",
-          }}
-        >
-          {label}
-        </Text>
-      </View>
+      <BadgeStatus
+        style={{ alignSelf: "flex-start" }}
+        variant={label === Label.Fresh ? "success" : "danger"}
+      />
     </View>
   );
 };
@@ -285,184 +272,192 @@ const CardOverview = ({
 
 export default function HomePage() {
   return (
-    <ImageBackground
-      source={require("@/assets/images/banner-homepage.png")}
-      imageStyle={{ flex: 1 }}
-    >
-      <ScrollView>
-        {/* Header */}
-        <View
-          style={{
-            flexDirection: "row",
-            marginTop: 60,
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingHorizontal: 16,
-          }}
-        >
-          <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
-            <Image
-              source={require("@/assets/images/avatar.png")}
+    <>
+      <StatusBar style="light" />
+      <ImageBackground
+        source={require("@/assets/images/banner-homepage.png")}
+        imageStyle={{ flex: 1 }}
+      >
+        <ScrollView>
+          {/* Header */}
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 60,
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingHorizontal: 16,
+            }}
+          >
+            <View
+              style={{ flexDirection: "row", gap: 12, alignItems: "center" }}
+            >
+              <Image
+                source={require("@/assets/images/avatar.png")}
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 22,
+                  overflow: "hidden",
+                }}
+              />
+              <View>
+                <Text
+                  style={{
+                    color: colors.WHITE,
+                    fontFamily: "DMSans-SemiBold",
+                    fontSize: 16,
+                  }}
+                >
+                  Welcome back!!
+                </Text>
+                <Text
+                  style={{ color: colors.WHITE, fontFamily: "DMSans-Regular" }}
+                >
+                  Kim Chaewon
+                </Text>
+              </View>
+            </View>
+            <BlurView
+              // experimentalBlurMethod="dimezisBlurView"
+              intensity={15}
+              tint="light"
               style={{
+                borderRadius: 999,
+                overflow: "hidden",
+                backgroundColor: "rgba(169,169,169,0.15)",
                 width: 44,
                 height: 44,
-                borderRadius: 22,
-                overflow: "hidden",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "relative",
               }}
-            />
+            >
+              <Button style={{ backgroundColor: "transparent" }}>
+                <Ionicons
+                  name="notifications-outline"
+                  size={18}
+                  color="white"
+                />
+              </Button>
+              {/* Badge Merah */}
+              <View
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: 4,
+                  backgroundColor: "#E71212",
+                  position: "absolute",
+                  top: 10,
+                  right: 10,
+                }}
+              />
+            </BlurView>
+          </View>
+
+          {/* Info */}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingHorizontal: 16,
+              marginTop: 224,
+              marginBottom: 13,
+            }}
+          >
             <View>
               <Text
                 style={{
+                  fontFamily: "DMSans-Medium",
+                  fontSize: 64,
+                  height: 64,
+                  lineHeight: 72,
                   color: colors.WHITE,
-                  fontFamily: "DMSans-SemiBold",
-                  fontSize: 16,
+                  letterSpacing: 0.5,
+                  marginBottom: 4,
                 }}
               >
-                Welcome back!!
+                85
               </Text>
               <Text
-                style={{ color: colors.WHITE, fontFamily: "DMSans-Regular" }}
+                style={{
+                  fontFamily: "DMSans-Regular",
+                  fontSize: 16,
+                  color: colors.WHITE,
+                }}
               >
-                Kim Chaewon
+                Safe for daily use
               </Text>
             </View>
+            <View style={{ gap: 8 }}>
+              <BlurView
+                intensity={15}
+                tint="light"
+                style={{
+                  alignSelf: "flex-end",
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                  gap: 8,
+                  backgroundColor: "rgba(169,169,169,0.15)",
+                  borderRadius: 999,
+                  overflow: "hidden",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <MaterialCommunityIcons name="water" size={16} color="white" />
+                <Text style={{ color: colors.WHITE }}>150 ppm</Text>
+              </BlurView>
+              <BlurView
+                intensity={15}
+                tint="light"
+                style={{
+                  alignSelf: "flex-end",
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                  gap: 8,
+                  backgroundColor: "rgba(169,169,169,0.15)",
+                  borderRadius: 999,
+                  overflow: "hidden",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <FontAwesome5 name="microscope" size={16} color="white" />
+                <Text style={{ color: colors.WHITE }}>8.2 pH</Text>
+              </BlurView>
+            </View>
           </View>
-          <BlurView
-            // experimentalBlurMethod="dimezisBlurView"
-            intensity={15}
-            tint="light"
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 4 }}
+          >
+            {news.map((item, index) => (
+              <CardNews
+                key={index}
+                time={item.time}
+                name={item.name}
+                label={item.label}
+              />
+            ))}
+          </ScrollView>
+
+          <View
             style={{
-              borderRadius: 999,
-              overflow: "hidden",
-              backgroundColor: "rgba(169,169,169,0.15)",
-              width: 44,
-              height: 44,
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
+              backgroundColor: colors.WHITE,
+              marginTop: 4,
+              flex: 1,
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+              padding: 16,
+              gap: 28,
             }}
           >
-            <Button style={{ backgroundColor: "transparent" }}>
-              <Ionicons name="notifications-outline" size={18} color="white" />
-            </Button>
-            {/* Badge Merah */}
-            <View
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: 4,
-                backgroundColor: "#E71212",
-                position: "absolute",
-                top: 10,
-                right: 10,
-              }}
-            />
-          </BlurView>
-        </View>
-
-        {/* Info */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingHorizontal: 16,
-            marginTop: 224,
-            marginBottom: 13,
-          }}
-        >
-          <View>
-            <Text
-              style={{
-                fontFamily: "DMSans-Medium",
-                fontSize: 64,
-                height: 64,
-                lineHeight: 72,
-                color: colors.WHITE,
-                letterSpacing: 0.5,
-                marginBottom: 4,
-              }}
-            >
-              85
-            </Text>
-            <Text
-              style={{
-                fontFamily: "DMSans-Regular",
-                fontSize: 16,
-                color: colors.WHITE,
-              }}
-            >
-              Safe for daily use
-            </Text>
-          </View>
-          <View style={{ gap: 8 }}>
-            <BlurView
-              intensity={15}
-              tint="light"
-              style={{
-                alignSelf: "flex-end",
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                gap: 8,
-                backgroundColor: "rgba(169,169,169,0.15)",
-                borderRadius: 999,
-                overflow: "hidden",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <MaterialCommunityIcons name="water" size={16} color="white" />
-              <Text style={{ color: colors.WHITE }}>150 ppm</Text>
-            </BlurView>
-            <BlurView
-              intensity={15}
-              tint="light"
-              style={{
-                alignSelf: "flex-end",
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                gap: 8,
-                backgroundColor: "rgba(169,169,169,0.15)",
-                borderRadius: 999,
-                overflow: "hidden",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <FontAwesome5 name="microscope" size={16} color="white" />
-              <Text style={{ color: colors.WHITE }}>8.2 pH</Text>
-            </BlurView>
-          </View>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 4 }}
-        >
-          {news.map((item, index) => (
-            <CardNews
-              key={index}
-              time={item.time}
-              name={item.name}
-              label={item.label}
-            />
-          ))}
-        </ScrollView>
-
-        <View
-          style={{
-            backgroundColor: colors.WHITE,
-            marginTop: 4,
-            flex: 1,
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
-            padding: 16,
-            gap: 28,
-          }}
-        >
-          {/* Water Overview */}
-          {/* <View
+            {/* Water Overview */}
+            {/* <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -488,35 +483,38 @@ export default function HomePage() {
             />
           ))} */}
 
-          {/* Water Insight */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ fontFamily: "DMSans-SemiBold", fontSize: 20 }}>
-              Water Insights
-            </Text>
-            <Pressable>
-              <Text style={{ fontFamily: "DMSans-Regular", color: "#0A40E2" }}>
-                View All
+            {/* Water Insight */}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontFamily: "DMSans-SemiBold", fontSize: 20 }}>
+                Water Insights
               </Text>
-            </Pressable>
+              <Pressable>
+                <Text
+                  style={{ fontFamily: "DMSans-Regular", color: "#0A40E2" }}
+                >
+                  View All
+                </Text>
+              </Pressable>
+            </View>
+            {insight.map((item, index) => (
+              <CardOverview
+                id={item.id}
+                key={index}
+                name={item.name}
+                image={item.image}
+                date={item.date}
+                variant="article"
+              />
+            ))}
           </View>
-          {insight.map((item, index) => (
-            <CardOverview
-              id={item.id}
-              key={index}
-              name={item.name}
-              image={item.image}
-              date={item.date}
-              variant="article"
-            />
-          ))}
-        </View>
-      </ScrollView>
-    </ImageBackground>
+        </ScrollView>
+      </ImageBackground>
+    </>
   );
 }

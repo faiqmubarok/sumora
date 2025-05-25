@@ -34,7 +34,7 @@ export default function RootLayout() {
   return (
     <TanstackProvider>
       <Stack screenOptions={{ headerShown: false }} />
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
     </TanstackProvider>
   );
 }

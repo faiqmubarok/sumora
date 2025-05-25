@@ -1,10 +1,7 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text } from "react-native";
+import React from "react";
+import PulsePage from "@/components/pages/pulse";
 
 export default function Pulse() {
-  return (
-    <View>
-      <Text>Pulse</Text>
-    </View>
-  )
+  return <PulsePage />;
 }
